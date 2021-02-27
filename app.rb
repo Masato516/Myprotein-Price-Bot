@@ -1,6 +1,6 @@
 require 'bundler/setup'
 Bundler.require
-require './src/line.rb'
+require './src/line'
 
 get '/' do
     'true'
