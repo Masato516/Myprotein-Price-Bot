@@ -28,6 +28,11 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
+
+        if event.message['text'] =~ /おみくじ/
+          message[:text] = %w(大吉 中吉 小吉 凶 大凶).shuffle.first
+        end
+        
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
