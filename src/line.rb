@@ -85,9 +85,10 @@ post '/callback' do
   "OK"
 end
 
+# プッシュ通知
 message = {
   type: 'text',
-  text: 'hello'
+  text: price
 }
-response = client.push_message("myg0516healthier", message)
+response = client.push_message(ENV["LINE_USER_ID"], message)
 p response

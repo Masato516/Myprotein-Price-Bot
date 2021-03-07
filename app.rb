@@ -1,7 +1,8 @@
 require 'bundler/setup'
 Bundler.require
-require './src/line'
 Dotenv.load
+require './src/scrape'
+require './src/line'
 
 get '/' do
     'true'
