@@ -13,3 +13,7 @@ gem 'sinatra-contrib', '~> 2.1'
 gem 'dotenv', '~> 2.7', '>= 2.7.6'
 
 gem 'rake', '~> 13.0', '>= 13.0.3'
+
+gem 'mechanize', '~> 2.7', '>= 2.7.7'
+
+gem 'nokogiri', '~> 1.11', '>= 1.11.1'

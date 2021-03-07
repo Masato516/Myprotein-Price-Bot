@@ -21,11 +21,22 @@ def template
   }
 end
 
+def stations(longitude, latitude)
+  uri = URI("http://express.heartrails.com/api/json")
+  uri.query = URI.encode_www_form({
+  method: "getStations",
+    x: longitude,
+    y: latitude
+  })
+  res = Net::HTTP.get_response(uri)
+  JSON.parse(res.body)["response"]["station"]
+end
+
 def client
   @client ||= Line::Bot::Client.new { |config|
-    config.channel_id = ENV["LINE_CHANNEL_ID"]
-    config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
-    config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
+    p config.channel_id = ENV["LINE_CHANNEL_ID"]
+    p config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
+    p config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
   }
 end
 
@@ -47,24 +58,36 @@ post '/callback' do
           type: 'text',
           text: event.message['text']
         }
-
         if event.message['text'] =~ /おみくじ/
           message[:text] = %w(大吉 中吉 小吉 凶 大凶).shuffle.first
           client.reply_message(event['replyToken'], message)
         elsif event.message['text'] =~ /駅/
           client.reply_message(event['replyToken'], template)
         end
-
-        
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
         response = client.get_message_content(event.message['id'])
         tf = Tempfile.open("content")
         tf.write(response.body)
+      when Line::Bot::Event::MessageType::Location
+        p event["message"]["latitude"]
+        p event["message"]["longitude"]
+        # APIを呼び出す関数です
+        p stations = stations(event["message"]["longitude"], event["message"]["latitude"])
+        p message = stations.map{|station|
+          "#{station["name"]}駅 >> #{station["line"]}"
+        }.join("\n")
+        client.reply_message(event['replyToken'],{ type: 'text', text: message })
       end
-    when
     end
   end
 
   # Don't forget to return a successful response
   "OK"
 end
+
+message = {
+  type: 'text',
+  text: 'hello'
+}
+response = client.push_message("myg0516healthier", message)
+p response
