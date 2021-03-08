@@ -95,5 +95,4 @@ message = {
   type: 'text',
   text: price
 }
-response = client.push_message(ENV["LINE_USER_ID"], message)
-p response
+client.push_message(ENV["LINE_USER_ID"], message)
