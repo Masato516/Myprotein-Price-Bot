@@ -85,6 +85,11 @@ post '/callback' do
   "OK"
 end
 
+agent = Crawler.login
+page = Crawler.get_page('https://www.myprotein.jp/my.basket', agent)
+discountCode = Crawler.find_discountCode(page)
+price = Crawler.discount(page, agent, discountCode)
+
 # プッシュ通知
 message = {
   type: 'text',
