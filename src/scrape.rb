@@ -1,8 +1,6 @@
 require 'mechanize'
 require 'nokogiri'
 require 'dotenv'
-Dotenv.load
-
 
 module Crawler
     def login #=> 戻り値: agent
